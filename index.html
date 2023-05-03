@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Apex Legends season-info</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Apex Legends season info</h1>
+  <div class="progress-bar">
+    <p>Season Progress:</p>
+    <progress max="100" value="5.2"></progress>
+    <p>Split Progress:</p>
+    <progress max="100" value="9.2"></progress>
+  </div>
+  <div class="season-info">
+    <p>Season Number: <span id="season-number"></span></p>
+    <p>Season Name: <span id="season-name"></span></p>
+    <p>Season Start: <span id="season-start"></span></p>
+    <p>Season Split: <span id="season-split"></span></p>
+    <p>Season End: <span id="season-end"></span></p>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $.getJSON("https://game-season-api.kasu.dev/apex/current", function(data) {
+        var seasonNumber = data.season.number;
+        var seasonName = data.season.name;
+        var seasonStart = new Date(data.season.start).toLocaleString();
+        var seasonSplit = new Date(data.season.split).toLocaleString();
+        var seasonEnd = new Date(data.season.end).toLocaleString();
+        var splitProgress = data.progress.splitProgress;
+        var seasonProgress = data.progress.seasonProgress;
+
+        // Set the value of the progress bars
+        $("progress:eq(0)").val(parseFloat(seasonProgress));
+        $("progress:eq(1)").val(parseFloat(splitProgress));
+
+        // Set the season information
+        $("#season-number").text(seasonNumber);
+        $("#season-name").text(seasonName);
+        $("#season-start").text(seasonStart);
+        $("#season-split").text(seasonSplit);
+        $("#season-end").text(seasonEnd);
+      });
+    });
+  </script>
+</body>
+</html>
